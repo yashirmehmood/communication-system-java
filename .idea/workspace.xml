@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="added the implementation of PlayerFactory">
+    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="added the implementation of PlayerCommunicationHandler">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/PlayerCommunicationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/PlayerCommunicationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/MessageBroker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/MessageBroker.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +80,14 @@
       <option name="project" value="LOCAL" />
       <updated>1764780972171</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added the implementation of PlayerCommunicationHandler">
+      <created>1764781154593</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1764781154593</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -96,6 +105,7 @@
     <MESSAGE value="First Commit - created PlayerFactory and Player" />
     <MESSAGE value="added Player related classes" />
     <MESSAGE value="added the implementation of PlayerFactory" />
-    <option name="LAST_COMMIT_MESSAGE" value="added the implementation of PlayerFactory" />
+    <MESSAGE value="added the implementation of PlayerCommunicationHandler" />
+    <option name="LAST_COMMIT_MESSAGE" value="added the implementation of PlayerCommunicationHandler" />
   </component>
 </project>

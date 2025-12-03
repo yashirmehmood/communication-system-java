@@ -72,17 +72,18 @@ public class PlayerCommunicationHandler {
      * Starts the messaging process where the initiator sends messages to the responder.
      */
     public void startCommunication() {
-        for (int i = 1; i <= maxMessages; i++) {
-            String message = "Message " + i;
-            initiator.sendMessage(responder.getName(), message);
-
-            // Sleep briefly to allow messages to be processed sequentially
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
+        try {
+            for (int i = 1; i <= maxMessages; i++) {
+                String message = "Message " + i;
+                initiator.sendMessage(responder.getName(), message);
+                Thread.sleep(100); // simulate delay
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Communication interrupted: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Unexpected error during communication: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

@@ -54,11 +54,16 @@ public class MessageBroker {
      * @param message      Message content
      */
     public void publishMessage(String senderName, String receiverName, String message) {
-        Player receiver = playerRegistry.get(receiverName);
-        if (receiver != null) {
-            receiver.receiveMessage(senderName, message);
-        } else {
-            System.out.println("[" + senderName + "] attempted to send message to unknown player: " + receiverName);
+        try {
+            Player receiver = playerRegistry.get(receiverName);
+            if (receiver != null) {
+                receiver.receiveMessage(senderName, message);
+            } else {
+                System.out.println("[" + senderName + "] attempted to send message to unknown player: " + receiverName);
+            }
+        } catch (Exception e){
+            System.err.println("Error delivering message from " + senderName + " to " + receiverName);
+            e.printStackTrace();
         }
     }
 }
