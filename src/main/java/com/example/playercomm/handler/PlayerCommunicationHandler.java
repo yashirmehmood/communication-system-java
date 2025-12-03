@@ -1,7 +1,7 @@
 package com.example.playercomm.handler;
 
 import com.example.playercomm.core.Player;
-import com.example.playercomm.factory.PlayerFactory;
+import com.example.playercomm.core.factory.PlayerFactory;
 import com.example.playercomm.model.Message;
 import com.example.playercomm.transport.MessageBroker;
 

@@ -1,4 +1,4 @@
-package com.example.playercomm.factory;
+package com.example.playercomm.core.factory;
 
 import com.example.playercomm.core.Player;
 import com.example.playercomm.transport.MessageBroker;
