@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="CommunicationHandlerFactory class generated">
+    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="Memory cleanup and shutting down gracefully">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/factory/PlayerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/factory/PlayerFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/factory/CommunicationHandlerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/factory/CommunicationHandlerFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SameProcessCommunicationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SameProcessCommunicationHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/MessageBroker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/PlayerMessageRouter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SeparateProcessCommunicationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SeparateProcessCommunicationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/PlayerMessageRouter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/PlayerMessageRouter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,7 +140,14 @@
       <option name="project" value="LOCAL" />
       <updated>1764788420992</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Memory cleanup and shutting down gracefully">
+      <created>1764789030485</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1764789030485</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -164,6 +173,7 @@
     <MESSAGE value="restructuring of core package" />
     <MESSAGE value="Code Refactoring: made the separate handler classes for two different modes" />
     <MESSAGE value="CommunicationHandlerFactory class generated" />
-    <option name="LAST_COMMIT_MESSAGE" value="CommunicationHandlerFactory class generated" />
+    <MESSAGE value="Memory cleanup and shutting down gracefully" />
+    <option name="LAST_COMMIT_MESSAGE" value="Memory cleanup and shutting down gracefully" />
   </component>
 </project>

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Minimal pub-sub message broker for Players.
+ * Minimal pub-sub message router for Players.
  *
  * Responsibilities:
  * - Maintains a registry of all active players
@@ -35,7 +35,7 @@ public class PlayerMessageRouter {
     }
 
     /**
-     * Removes a player from the broker registry.
+     * Removes a player from the router registry.
      *
      * @param player Player instance to unregister
      */

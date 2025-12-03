@@ -5,35 +5,35 @@ import com.example.playercomm.transport.PlayerMessageRouter;
 
 /**
  * PlayerFactory is responsible for creating Player instances
- * and registering them with a provided MessageBroker.
+ * and registering them with a provided PlayerMessageRouter.
  *
  * Responsibilities:
  * - Create new Player objects
- * - Ensure they are registered with the broker immediately
+ * - Ensure they are registered with the router immediately
  */
 public class PlayerFactory {
 
-    private final PlayerMessageRouter broker;
+    private final PlayerMessageRouter router;
 
     /**
-     * Constructs a PlayerFactory with the given MessageBroker.
+     * Constructs a PlayerFactory with the given PlayerMessageRouter.
      *
-     * @param broker The MessageBroker to register players with
+     * @param router The PlayerMessageRouter to register players with
      */
-    public PlayerFactory(PlayerMessageRouter broker) {
-        this.broker = broker;
+    public PlayerFactory(PlayerMessageRouter router) {
+        this.router = router;
     }
 
     /**
-     * Creates a new Player with the specified name, registers it with the broker,
+     * Creates a new Player with the specified name, registers it with the router,
      * and returns the instance.
      *
      * @param playerName Unique name for the player
      * @return Newly created Player instance
      */
     public Player createPlayer(String playerName) {
-        Player player = new Player(playerName, broker);
-        broker.registerPlayer(player);
+        Player player = new Player(playerName, router);
+        router.registerPlayer(player);
         return player;
     }
 }

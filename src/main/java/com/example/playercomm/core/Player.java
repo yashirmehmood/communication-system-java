@@ -8,33 +8,33 @@ import com.example.playercomm.transport.PlayerMessageRouter;
  *
  * Responsibilities:
  * - Holds the identity of the player
- * - Sends messages via the MessageBroker
- * - Receives messages from other players through the broker
- * - Can unregister itself from the broker when shutting down
+ * - Sends messages via the PlayerMessageRouter
+ * - Receives messages from other players through the Router
+ * - Can unregister itself from the Router when shutting down
  */
 public class Player {
 
     private final String name;
-    private final PlayerMessageRouter broker;
+    private final PlayerMessageRouter router;
 
-    public Player(String name, PlayerMessageRouter broker) {
+    public Player(String name, PlayerMessageRouter router) {
         this.name = name;
-        this.broker = broker;
+        this.router = router;
     }
 
     /**
-     * Sends a Message object to another player through the broker.
+     * Sends a Message object to another player through the router.
      *
      * @param receiverName name of the receiver
      * @param content      message content
      */
     public void sendMessage(String receiverName, String content) {
         Message message = new Message(name, receiverName, content);
-        broker.publishMessage(message);
+        router.publishMessage(message);
     }
 
     /**
-     * Callback invoked by the broker when a message is received.
+     * Callback invoked by the router when a message is received.
      *
      * @param message Message object
      */
@@ -47,11 +47,11 @@ public class Player {
     }
 
     /**
-     * Unregisters this player from the broker.
+     * Unregisters this player from the router.
      * Should be called when the player is no longer needed.
      */
     public void shutdown() {
-        broker.unregisterPlayer(this);
-        System.out.println("[" + name + "] has been unregistered from the broker.");
+        router.unregisterPlayer(this);
+        System.out.println("[" + name + "] has been unregistered from the router.");
     }
 }
