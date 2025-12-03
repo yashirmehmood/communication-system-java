@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Notes:
  * - Both players run in the same process
  */
-public class PlayerCommunicationHandler {
+public class SameProcessCommunicationHandler {
 
     private final MessageBroker broker;
     private final PlayerFactory factory;
@@ -29,7 +29,7 @@ public class PlayerCommunicationHandler {
     private final AtomicInteger initiatorReceivedCount = new AtomicInteger(0);
     private final int maxMessages = 10;
 
-    public PlayerCommunicationHandler() {
+    public SameProcessCommunicationHandler() {
         this.broker = new MessageBroker();
         this.factory = new PlayerFactory(broker);
     }

@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="Created Message class for future enhancement">
+    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="restructuring of core package">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SeparateProcessCommunicationHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/util/InputUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/PlayerCommunicationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/PlayerCommunicationHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/MessageBroker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/MessageBroker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/PlayerCommunicationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SameProcessCommunicationHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +110,21 @@
       <option name="project" value="LOCAL" />
       <updated>1764782160777</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Adjusted the code for message class">
+      <created>1764782607895</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1764782607895</updated>
+    </task>
+    <task id="LOCAL-00009" summary="restructuring of core package">
+      <created>1764783433167</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1764783433167</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -131,6 +146,8 @@
     <MESSAGE value="Exception Handling in PlayerCommunicationHandler and MessageBroker" />
     <MESSAGE value="Added Main class" />
     <MESSAGE value="Created Message class for future enhancement" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created Message class for future enhancement" />
+    <MESSAGE value="Adjusted the code for message class" />
+    <MESSAGE value="restructuring of core package" />
+    <option name="LAST_COMMIT_MESSAGE" value="restructuring of core package" />
   </component>
 </project>
