@@ -19,6 +19,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * - Responder always replies with appended counter
  * - Uses sockets for inter-process communication
  * - Ensures proper cleanup of sockets and Player registration
+ *
+ * Notes:
+ * - Designed to be flexible for future communication modes
+ * - Follows DRY principle for input handling and cleanup
  */
 public class SeparateProcessCommunicationHandler {
 
@@ -51,12 +55,10 @@ public class SeparateProcessCommunicationHandler {
     public void startCommunication() {
         player = factory.createPlayer(role);
 
-        if ("initiator".equals(role)) {
-            runInitiator();
-        } else if ("responder".equals(role)) {
-            runResponder();
-        } else {
-            System.err.println("Invalid role: " + role);
+        switch (role) {
+            case "initiator" -> runInitiator();
+            case "responder" -> runResponder();
+            default -> System.err.println("Invalid role: " + role);
         }
     }
 
@@ -65,11 +67,36 @@ public class SeparateProcessCommunicationHandler {
      */
     private void runInitiator() {
         boolean automatic = InputUtils.readYesNo(scanner, "Do you want to send messages automatically?");
+        Socket socket = connectToResponder();
+
+        if (socket == null) return;
+
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
+            if (automatic) {
+                sendMessagesAutomatically(writer, reader);
+            } else {
+                sendMessagesManually(writer, reader);
+            }
+
+            System.out.println("[Initiator] Communication complete.");
+
+        } catch (IOException e) {
+            System.err.println("[Initiator] I/O error: " + e.getMessage());
+        } finally {
+            cleanup();
+        }
+    }
+
+    /**
+     * Connects to the responder socket with retries.
+     */
+    private Socket connectToResponder() {
         int maxRetries = 8;
         int attempt = 0;
         Socket socket = null;
 
-        // Retry connection until responder is available
         while (attempt < maxRetries) {
             try {
                 System.out.println("[Initiator] Connecting to responder at port " + otherPort + " (Attempt " + (attempt + 1) + "/" + maxRetries + ")...");
@@ -77,41 +104,45 @@ public class SeparateProcessCommunicationHandler {
                 break;
             } catch (IOException e) {
                 attempt++;
-                System.out.println("[Initiator] Responder not ready yet. Retrying in 1 second...");
-                try { Thread.sleep(1000); } catch (InterruptedException ex) { Thread.currentThread().interrupt(); return; }
+                System.out.println("[Initiator] Responder not ready yet. Retrying in 2 second...");
+                try { Thread.sleep(2000); } catch (InterruptedException ex) { Thread.currentThread().interrupt(); return null; }
             }
         }
 
         if (socket == null) {
             System.err.println("[Initiator] Could not connect. Please start the responder first.");
-            return;
         }
+        return socket;
+    }
 
-        System.out.println("[Initiator] Connected. Starting communication...");
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+    /**
+     * Sends messages automatically in sequence (Message 1..10).
+     */
+    private void sendMessagesAutomatically(BufferedWriter writer, BufferedReader reader) throws IOException {
+        for (int i = 1; i <= maxMessages; i++) {
+            String msg = "Message " + i;
+            System.out.println("[Initiator] Sending: " + msg);
+            writer.write(msg);
+            writer.newLine();
+            writer.flush();
 
-            for (int i = 1; i <= maxMessages; i++) {
-                String msg;
-                if (automatic) {
-                    msg = "Message " + i;
-                    System.out.println("[Initiator] Sending: " + msg);
-                } else {
-                    msg = InputUtils.readLine(scanner, "Enter message " + i + ": ");
-                }
-                writer.write(msg);
-                writer.newLine();
-                writer.flush();
+            String response = reader.readLine();
+            System.out.println("[Initiator] Received: " + response);
+        }
+    }
 
-                String response = reader.readLine();
-                System.out.println("[Initiator] Received: " + response);
-            }
-            System.out.println("[Initiator] Communication complete.");
+    /**
+     * Sends messages manually by reading user input.
+     */
+    private void sendMessagesManually(BufferedWriter writer, BufferedReader reader) throws IOException {
+        for (int i = 1; i <= maxMessages; i++) {
+            String msg = InputUtils.readLine(scanner, "Enter message " + i + ": ");
+            writer.write(msg);
+            writer.newLine();
+            writer.flush();
 
-        } catch (IOException e) {
-            System.err.println("[Initiator] I/O error: " + e.getMessage());
-        } finally {
-            cleanup();
+            String response = reader.readLine();
+            System.out.println("[Initiator] Received: " + response);
         }
     }
 
