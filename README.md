@@ -31,6 +31,10 @@ Routers, Communication Handlers, and extensive input utilities.
 -   Retry logic ensures connection stability
 -   Safe cleanup of resources
 
+### Repository
+
+- `GitHub Repo:` https://github.com/yashirmehmood/communication-system-java.git
+
 ### 🎯 General Architecture
 
 -   `Player` → Represents a communicating entity\
@@ -133,8 +137,7 @@ Select:
 
 ## 📘 License
 
-This project is provided for educational and interview preparation
-purposes.
+This project is provided for educational and learning purposes
 
 ------------------------------------------------------------------------
 

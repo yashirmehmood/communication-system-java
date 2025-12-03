@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="wrote the test cases">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="added Readme file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +50,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="H:\MavenTask\player-communication" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.example.playercomm.transport" />
       <recent name="com.example.playercomm.core" />
@@ -176,7 +179,21 @@
       <option name="project" value="LOCAL" />
       <updated>1764797266722</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary=".gitignore updated to exclude workspace.xml">
+      <created>1764797622720</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1764797622720</updated>
+    </task>
+    <task id="LOCAL-00018" summary="added Readme file">
+      <created>1764797943590</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1764797943590</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -207,6 +224,8 @@
     <MESSAGE value="Retrying attempts to connect with responder" />
     <MESSAGE value="Code Refactoring: Giving option to send messages manually or automatically in separate process mode" />
     <MESSAGE value="wrote the test cases" />
-    <option name="LAST_COMMIT_MESSAGE" value="wrote the test cases" />
+    <MESSAGE value=".gitignore updated to exclude workspace.xml" />
+    <MESSAGE value="added Readme file" />
+    <option name="LAST_COMMIT_MESSAGE" value="added Readme file" />
   </component>
 </project>
