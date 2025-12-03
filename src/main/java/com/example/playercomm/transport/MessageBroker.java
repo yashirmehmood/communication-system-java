@@ -1,31 +1,31 @@
 package com.example.playercomm.transport;
 
 import com.example.playercomm.core.Player;
+import com.example.playercomm.model.Message;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * MessageBroker implements a minimal pub-sub system for players.
+ * Minimal pub-sub message broker for Players.
+ *
  * Responsibilities:
- * - Maintain a registry of all active players.
- * - Route messages from senders to receivers.
- * - Decouple players from direct references to each other.
+ * - Maintains a registry of all active players
+ * - Routes Message objects from senders to intended receivers
  *
  * Notes:
- * - Thread-safe using ConcurrentHashMap.
- * - Supports single-process communication only (in-memory).
- * - Future extension: can add channels/topics, message filtering, or async delivery.
+ * - Thread-safe using ConcurrentHashMap
+ * - Supports single-process communication
+ * - Easily extendable for future features such as broadcasting or filtering
  */
 public class MessageBroker {
 
-    // Registry of players keyed by their names
     private final Map<String, Player> playerRegistry = new ConcurrentHashMap<>();
 
     /**
-     * Registers a player to the broker so it can send/receive messages.
+     * Registers a player to allow it to send and receive messages.
      *
-     * @param player The player to register
+     * @param player Player instance to register
      */
     public void registerPlayer(Player player) {
         if (player == null || player.getName() == null) {
@@ -35,9 +35,9 @@ public class MessageBroker {
     }
 
     /**
-     * Unregisters a player from the broker.
+     * Removes a player from the broker registry.
      *
-     * @param player The player to remove
+     * @param player Player instance to unregister
      */
     public void unregisterPlayer(Player player) {
         if (player != null && player.getName() != null) {
@@ -46,23 +46,20 @@ public class MessageBroker {
     }
 
     /**
-     * Publishes a message from a sender to a receiver.
-     * If the receiver is registered, its receiveMessage() method is invoked.
+     * Publishes a message from a sender to the intended receiver.
      *
-     * @param senderName   Name of the player sending the message
-     * @param receiverName Name of the intended receiver
-     * @param message      Message content
+     * @param message Message object containing sender, receiver, and content
      */
-    public void publishMessage(String senderName, String receiverName, String message) {
+    public void publishMessage(Message message) {
         try {
-            Player receiver = playerRegistry.get(receiverName);
+            Player receiver = playerRegistry.get(message.getReceiver());
             if (receiver != null) {
-                receiver.receiveMessage(senderName, message);
+                receiver.receiveMessage(message);
             } else {
-                System.out.println("[" + senderName + "] attempted to send message to unknown player: " + receiverName);
+                System.out.println("[" + message.getSender() + "] attempted to send message to unknown player: " + message.getReceiver());
             }
-        } catch (Exception e){
-            System.err.println("Error delivering message from " + senderName + " to " + receiverName);
+        } catch (Exception e) {
+            System.err.println("Error delivering message from " + message.getSender() + " to " + message.getReceiver());
             e.printStackTrace();
         }
     }

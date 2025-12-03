@@ -1,59 +1,50 @@
 package com.example.playercomm.core;
 
+import com.example.playercomm.model.Message;
 import com.example.playercomm.transport.MessageBroker;
 
 /**
- * Represents a player participating in the communication system.
- * A Player can send messages to other players through the MessageBroker
- * and can also receive messages passed by the broker.
+ * Represents a Player in the communication system.
  *
- * This class is intentionally lightweight:
- * - It contains only identity information and basic send/receive behavior.
- * - It does not know about other players directly (decoupled design).
- * - All routing is handled by the MessageBroker.
+ * Responsibilities:
+ * - Holds the identity of the player
+ * - Sends messages via the MessageBroker
+ * - Receives messages from other players through the broker
+ *
+ * Notes:
+ * - The Player is decoupled from other Player instances
+ * - The class supports extension for custom message handling
  */
 public class Player {
 
     private final String name;
-    private final MessageBroker messageBroker;
+    private final MessageBroker broker;
 
-    /**
-     * Creates a new Player instance.
-     *
-     * @param name  Unique name of the player.
-     * @param messageBroker  The broker responsible for routing messages.
-     */
-    public Player(String name, MessageBroker messageBroker) {
+    public Player(String name, MessageBroker broker) {
         this.name = name;
-        this.messageBroker = messageBroker;
+        this.broker = broker;
     }
 
     /**
-     * Sends a message to another player by delegating the request
-     * to the MessageBroker.
+     * Sends a Message object to another player through the broker.
      *
-     * @param receiverName  The name of the player who should receive the message.
-     * @param message       The content of the message.
+     * @param receiverName name of the receiver
+     * @param content      message content
      */
-    public void sendMessage(String receiverName, String message) {
-        messageBroker.publishMessage(this.name, receiverName, message);
+    public void sendMessage(String receiverName, String content) {
+        Message message = new Message(name, receiverName, content);
+        broker.publishMessage(message);
     }
 
     /**
-     * Callback method invoked by the MessageBroker when this player receives a message.
+     * Callback invoked by the broker when a message is received.
      *
-     * @param senderName  Name of the sender.
-     * @param message     Content of the incoming message.
+     * @param message Message object
      */
-    public void receiveMessage(String senderName, String message) {
-        System.out.println("[" + name + "] received from " + senderName + ": " + message);
+    public void receiveMessage(Message message) {
+        System.out.println("[" + name + "] received: " + message);
     }
 
-    /**
-     * Returns the player's name.
-     *
-     * @return the name assigned to this player.
-     */
     public String getName() {
         return name;
     }

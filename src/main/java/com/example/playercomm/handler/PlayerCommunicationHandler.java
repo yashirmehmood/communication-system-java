@@ -2,19 +2,21 @@ package com.example.playercomm.handler;
 
 import com.example.playercomm.core.Player;
 import com.example.playercomm.factory.PlayerFactory;
+import com.example.playercomm.model.Message;
 import com.example.playercomm.transport.MessageBroker;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * PlayerCommunicationHandler is responsible for orchestrating
- * the communication between Player instances in the same JVM.
+ * Orchestrates the communication between Player instances in the same JVM.
  *
  * Responsibilities:
- * - Create players using PlayerFactory
- * - Manage sending and receiving of messages
- * - Implement the stop condition:
- *   initiator sends 10 messages and stops after receiving 10 replies
+ * - Creates players using PlayerFactory
+ * - Sets up message sending and receiving
+ * - Implements the assignment stop condition: initiator sends 10 messages and stops after 10 replies
+ *
+ * Notes:
+ * - Both players run in the same process
  */
 public class PlayerCommunicationHandler {
 
@@ -33,37 +35,39 @@ public class PlayerCommunicationHandler {
     }
 
     /**
-     * Initializes the players and sets up the message flow.
+     * Creates and registers the initiator and responder players.
+     *
+     * @param initiatorName Name of the initiating player
+     * @param responderName Name of the responding player
      */
     public void setupPlayers(String initiatorName, String responderName) {
+
         initiator = factory.createPlayer(initiatorName);
         responder = factory.createPlayer(responderName);
 
-        // Override receiveMessage to implement auto-reply
         responder = new Player(responderName, broker) {
-            @Override
-            public void receiveMessage(String senderName, String message) {
-                super.receiveMessage(senderName, message);
+            private int replyCounter = 0;
 
-                // Reply with received message + send counter
-                String reply = message + " [" + (super.getName() + "-reply") + "]";
-                sendMessage(senderName, reply);
+            @Override
+            public void receiveMessage(Message message) {
+                super.receiveMessage(message);
+                replyCounter++;
+                String reply = message.getContent() + " [" + replyCounter + "]";
+                sendMessage(message.getSender(), reply);
             }
         };
 
-        // Override initiator's receiveMessage to track replies
         initiator = new Player(initiatorName, broker) {
             @Override
-            public void receiveMessage(String senderName, String message) {
-                super.receiveMessage(senderName, message);
+            public void receiveMessage(Message message) {
+                super.receiveMessage(message);
                 int received = initiatorReceivedCount.incrementAndGet();
                 if (received >= maxMessages) {
-                    System.out.println("Initiator received all messages. Ending communication.");
+                    System.out.println("Initiator received all replies. Communication complete.");
                 }
             }
         };
 
-        // Register overridden players in the broker
         broker.registerPlayer(initiator);
         broker.registerPlayer(responder);
     }
@@ -74,16 +78,13 @@ public class PlayerCommunicationHandler {
     public void startCommunication() {
         try {
             for (int i = 1; i <= maxMessages; i++) {
-                String message = "Message " + i;
-                initiator.sendMessage(responder.getName(), message);
-                Thread.sleep(100); // simulate delay
+                String msg = "Message " + i;
+                initiator.sendMessage(responder.getName(), msg);
+                Thread.sleep(100);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.err.println("Communication interrupted: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("Unexpected error during communication: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }

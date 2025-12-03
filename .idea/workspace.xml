@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="Added Main class">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/model/Message.java" afterDir="false" />
+    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="Created Message class for future enhancement">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/PlayerCommunicationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/PlayerCommunicationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/MessageBroker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/MessageBroker.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +102,14 @@
       <option name="project" value="LOCAL" />
       <updated>1764781684811</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Created Message class for future enhancement">
+      <created>1764782160777</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1764782160777</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -121,6 +130,7 @@
     <MESSAGE value="added the implementation of PlayerCommunicationHandler" />
     <MESSAGE value="Exception Handling in PlayerCommunicationHandler and MessageBroker" />
     <MESSAGE value="Added Main class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Main class" />
+    <MESSAGE value="Created Message class for future enhancement" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created Message class for future enhancement" />
   </component>
 </project>
