@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * - Supports single-process communication
  * - Easily extendable for future features such as broadcasting or filtering
  */
-public class MessageBroker {
+public class PlayerMessageRouter {
 
     private final Map<String, Player> playerRegistry = new ConcurrentHashMap<>();
 

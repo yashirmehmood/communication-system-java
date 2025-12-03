@@ -1,7 +1,7 @@
 package com.example.playercomm.core.factory;
 
 import com.example.playercomm.core.Player;
-import com.example.playercomm.transport.MessageBroker;
+import com.example.playercomm.transport.PlayerMessageRouter;
 
 /**
  * PlayerFactory is responsible for creating Player instances
@@ -13,14 +13,14 @@ import com.example.playercomm.transport.MessageBroker;
  */
 public class PlayerFactory {
 
-    private final MessageBroker broker;
+    private final PlayerMessageRouter broker;
 
     /**
      * Constructs a PlayerFactory with the given MessageBroker.
      *
      * @param broker The MessageBroker to register players with
      */
-    public PlayerFactory(MessageBroker broker) {
+    public PlayerFactory(PlayerMessageRouter broker) {
         this.broker = broker;
     }
 

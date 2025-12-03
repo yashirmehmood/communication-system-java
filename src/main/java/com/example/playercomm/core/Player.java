@@ -1,7 +1,7 @@
 package com.example.playercomm.core;
 
 import com.example.playercomm.model.Message;
-import com.example.playercomm.transport.MessageBroker;
+import com.example.playercomm.transport.PlayerMessageRouter;
 
 /**
  * Represents a Player in the communication system.
@@ -10,17 +10,14 @@ import com.example.playercomm.transport.MessageBroker;
  * - Holds the identity of the player
  * - Sends messages via the MessageBroker
  * - Receives messages from other players through the broker
- *
- * Notes:
- * - The Player is decoupled from other Player instances
- * - The class supports extension for custom message handling
+ * - Can unregister itself from the broker when shutting down
  */
 public class Player {
 
     private final String name;
-    private final MessageBroker broker;
+    private final PlayerMessageRouter broker;
 
-    public Player(String name, MessageBroker broker) {
+    public Player(String name, PlayerMessageRouter broker) {
         this.name = name;
         this.broker = broker;
     }
@@ -47,5 +44,14 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    /**
+     * Unregisters this player from the broker.
+     * Should be called when the player is no longer needed.
+     */
+    public void shutdown() {
+        broker.unregisterPlayer(this);
+        System.out.println("[" + name + "] has been unregistered from the broker.");
     }
 }

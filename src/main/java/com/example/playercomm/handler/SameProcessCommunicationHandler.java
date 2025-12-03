@@ -3,7 +3,7 @@ package com.example.playercomm.handler;
 import com.example.playercomm.core.Player;
 import com.example.playercomm.core.factory.PlayerFactory;
 import com.example.playercomm.model.Message;
-import com.example.playercomm.transport.MessageBroker;
+import com.example.playercomm.transport.PlayerMessageRouter;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SameProcessCommunicationHandler {
 
-    private final MessageBroker broker;
+    private final PlayerMessageRouter broker;
     private final PlayerFactory factory;
 
     private Player initiator;
@@ -30,7 +30,7 @@ public class SameProcessCommunicationHandler {
     private final int maxMessages = 10;
 
     public SameProcessCommunicationHandler() {
-        this.broker = new MessageBroker();
+        this.broker = new PlayerMessageRouter();
         this.factory = new PlayerFactory(broker);
     }
 
