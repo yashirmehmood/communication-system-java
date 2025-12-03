@@ -6,12 +6,12 @@ import com.example.playercomm.handler.SeparateProcessCommunicationHandler;
 import java.util.Scanner;
 
 /**
- * Factory for creating communication handlers.
+ * Factory for creating communication handler instances.
  *
  * Responsibilities:
  * - Creates handler instances based on the selected mode
  * - Passes Scanner to handlers for user input
- * - Ensures future extensibility for new modes
+ * - Ensures future extensibility for new communication modes
  */
 public class CommunicationHandlerFactory {
 
@@ -30,7 +30,7 @@ public class CommunicationHandlerFactory {
                                        String role, int myPort, int otherPort, int maxMessages) {
         return switch (mode.toLowerCase()) {
             case "same" -> new SameProcessCommunicationHandler(scanner);
-            case "separate" -> new SeparateProcessCommunicationHandler(role, myPort, otherPort, maxMessages, scanner);
+            case "separate" -> new SeparateProcessCommunicationHandler(scanner, role, myPort, otherPort, maxMessages);
             default -> throw new IllegalArgumentException("Invalid mode: " + mode);
         };
     }

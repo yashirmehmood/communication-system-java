@@ -4,21 +4,18 @@ import com.example.playercomm.core.Player;
 import com.example.playercomm.core.factory.PlayerFactory;
 import com.example.playercomm.model.Message;
 import com.example.playercomm.transport.PlayerMessageRouter;
+import com.example.playercomm.util.InputUtils;
 
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Orchestrates the communication between Player instances in the same JVM.
+ * Handles communication between two Player instances running in the same JVM process.
  *
  * Responsibilities:
  * - Creates players using PlayerFactory
- * - Supports automatic or manual message sending
- * - Implements stop condition: initiator sends 10 messages and stops after 10 replies
- *
- * Notes:
- * - Both players run in the same process
- * - Scanner is used for manual message input
+ * - Allows initiator to send messages automatically or manually
+ * - Implements stop condition: initiator sends and receives 10 messages
  */
 public class SameProcessCommunicationHandler {
 
@@ -32,37 +29,36 @@ public class SameProcessCommunicationHandler {
     private final AtomicInteger initiatorReceivedCount = new AtomicInteger(0);
     private final int maxMessages = 10;
 
-    private boolean manualMode = false;
-
     public SameProcessCommunicationHandler(Scanner scanner) {
+        this.scanner = scanner;
         this.broker = new PlayerMessageRouter();
         this.factory = new PlayerFactory(broker);
-        this.scanner = scanner;
     }
 
+    /**
+     * Creates and registers the initiator and responder players.
+     *
+     * @param initiatorName Name of the initiating player
+     * @param responderName Name of the responding player
+     */
     public void setupPlayers(String initiatorName, String responderName) {
-        // Create and register players
-        initiator = factory.createPlayer(initiatorName);
-        responder = factory.createPlayer(responderName);
 
-        // Wrap responder to automatically reply with counter
         responder = new Player(responderName, broker) {
             private int replyCounter = 0;
 
             @Override
             public void receiveMessage(Message message) {
-                super.receiveMessage(message);
+                System.out.println("[" + getName() + "] received: " + message.getContent());
                 replyCounter++;
                 String reply = message.getContent() + " [" + replyCounter + "]";
                 sendMessage(message.getSender(), reply);
             }
         };
 
-        // Wrap initiator to track received messages
         initiator = new Player(initiatorName, broker) {
             @Override
             public void receiveMessage(Message message) {
-                super.receiveMessage(message);
+                System.out.println("[" + getName() + "] received: " + message.getContent());
                 int received = initiatorReceivedCount.incrementAndGet();
                 if (received >= maxMessages) {
                     System.out.println("Initiator received all replies. Communication complete.");
@@ -72,24 +68,28 @@ public class SameProcessCommunicationHandler {
 
         broker.registerPlayer(initiator);
         broker.registerPlayer(responder);
-
-        // Ask user if manual or automatic mode
-        manualMode = com.example.playercomm.util.InputUtils.readYesNo(scanner,
-                "Do you want to send messages manually?");
     }
 
+    /**
+     * Starts the messaging process where the initiator sends messages to the responder.
+     * User can choose automatic or manual message sending.
+     */
     public void startCommunication() {
+        boolean automatic = InputUtils.readYesNo(scanner, "Do you want to send messages automatically?");
         try {
-            for (int i = 1; i <= maxMessages; i++) {
-                String msg;
-                if (manualMode) {
-                    System.out.print("Enter message " + i + ": ");
-                    msg = scanner.nextLine();
-                } else {
-                    msg = "Message " + i;
-                    Thread.sleep(100); // small delay for readability
+            if (automatic) {
+                for (int i = 1; i <= maxMessages; i++) {
+                    String msg = "Message " + i;
+                    initiator.sendMessage(responder.getName(), msg);
+                    Thread.sleep(100);
                 }
-                initiator.sendMessage(responder.getName(), msg);
+            } else {
+                int sent = 0;
+                while (sent < maxMessages) {
+                    String msg = InputUtils.readLine(scanner, "Enter message " + (sent + 1) + ": ");
+                    initiator.sendMessage(responder.getName(), msg);
+                    sent++;
+                }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

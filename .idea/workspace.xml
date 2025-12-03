@@ -4,8 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="Retrying attempts to connect with responder">
+    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="Code Refactoring: Giving option to send messages manually or automatically in separate process mode">
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/playercomm/core/PlayerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/playercomm/core/factory/CommunicationHandlerFactoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/playercomm/core/factory/PlayerFactoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/playercomm/handler/SameProcessCommunicationHandlerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/playercomm/handler/SeparateProcessCommunicationHandlerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/playercomm/transport/PlayerMessageRouterTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/factory/CommunicationHandlerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/factory/CommunicationHandlerFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SameProcessCommunicationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SameProcessCommunicationHandler.java" afterDir="false" />
@@ -53,6 +60,12 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.example.playercomm.transport" />
+      <recent name="com.example.playercomm.core" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -160,7 +173,14 @@
       <option name="project" value="LOCAL" />
       <updated>1764792519895</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Code Refactoring: Giving option to send messages manually or automatically in separate process mode">
+      <created>1764794175518</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1764794175518</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -189,6 +209,7 @@
     <MESSAGE value="Memory cleanup and shutting down gracefully" />
     <MESSAGE value="Code Refactoring: Added option for auto 10 messages or manual" />
     <MESSAGE value="Retrying attempts to connect with responder" />
-    <option name="LAST_COMMIT_MESSAGE" value="Retrying attempts to connect with responder" />
+    <MESSAGE value="Code Refactoring: Giving option to send messages manually or automatically in separate process mode" />
+    <option name="LAST_COMMIT_MESSAGE" value="Code Refactoring: Giving option to send messages manually or automatically in separate process mode" />
   </component>
 </project>
