@@ -41,9 +41,9 @@ Routers, Communication Handlers, and extensive input utilities.
 -   `Message` → Data model for messages\
 -   `PlayerMessageRouter` → Routes messages between players\
 -   `PlayerFactory` → Creates player instances\
--   `SameProcessCommunicationHandler` → Handles in-JVM communication\
--   `SeparateProcessCommunicationHandler` → Handles inter-process
-    communication\
+-   `AbstractCommunicationHandler` → Base class for all communication handlers (provides automatic/manual message sending)
+-   `SameProcessCommunicationHandler` → Handles in-JVM communication, extends AbstractCommunicationHandler
+-   `SeparateProcessCommunicationHandler` → Handles inter-process communication via sockets, extends AbstractCommunicationHandler
 -   `InputUtils` → Centralized user input handling\
 -   `Main` → User interface for mode selection
 
