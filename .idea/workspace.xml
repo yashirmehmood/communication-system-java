@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="Memory cleanup and shutting down gracefully">
+    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="Code Refactoring: Added option for auto 10 messages or manual">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/factory/CommunicationHandlerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/factory/CommunicationHandlerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SameProcessCommunicationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SameProcessCommunicationHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SeparateProcessCommunicationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SeparateProcessCommunicationHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/PlayerMessageRouter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/transport/PlayerMessageRouter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/util/InputUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/util/InputUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,7 +144,14 @@
       <option name="project" value="LOCAL" />
       <updated>1764789030485</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Code Refactoring: Added option for auto 10 messages or manual">
+      <created>1764790953420</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1764790953420</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -174,6 +178,7 @@
     <MESSAGE value="Code Refactoring: made the separate handler classes for two different modes" />
     <MESSAGE value="CommunicationHandlerFactory class generated" />
     <MESSAGE value="Memory cleanup and shutting down gracefully" />
-    <option name="LAST_COMMIT_MESSAGE" value="Memory cleanup and shutting down gracefully" />
+    <MESSAGE value="Code Refactoring: Added option for auto 10 messages or manual" />
+    <option name="LAST_COMMIT_MESSAGE" value="Code Refactoring: Added option for auto 10 messages or manual" />
   </component>
 </project>

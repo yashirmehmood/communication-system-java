@@ -2,7 +2,6 @@ package com.example.playercomm.handler;
 
 import com.example.playercomm.core.Player;
 import com.example.playercomm.core.factory.PlayerFactory;
-import com.example.playercomm.model.Message;
 import com.example.playercomm.transport.PlayerMessageRouter;
 
 import java.io.*;
@@ -16,12 +15,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Responsibilities:
  * - Uses sockets to send and receive messages between processes
  * - Creates a Player object to manage sending/receiving
- * - Implements stop condition: initiator sends/receives maxMessages
+ * - Implements stop condition: initiator sends/receives 10 messages
  * - Ensures proper cleanup of sockets, streams, and players
  *
  * Notes:
- * - SeparateProcessCommunicationHandler can be either initiator or responder
- * - Uses simple socket programming (pure Java, no frameworks)
+ * - Can act as either initiator or responder
+ * - Uses pure Java socket programming
  */
 public class SeparateProcessCommunicationHandler {
 
@@ -32,8 +31,8 @@ public class SeparateProcessCommunicationHandler {
 
     private ServerSocket serverSocket;
     private Socket socket;
-    private PrintWriter out;
-    private BufferedReader in;
+    private BufferedReader reader;
+    private PrintWriter writer;
 
     private Player player;
     private final AtomicInteger messagesReceived = new AtomicInteger(0);
@@ -52,12 +51,12 @@ public class SeparateProcessCommunicationHandler {
     }
 
     /**
-     * Starts the separate-process communication.
-     * Handles both initiator and responder roles.
+     * Starts the communication based on the role (initiator/responder)
      */
     public void startCommunication() {
         try {
             setupPlayer();
+
             if ("initiator".equals(role)) {
                 runInitiator();
             } else if ("responder".equals(role)) {
@@ -65,7 +64,70 @@ public class SeparateProcessCommunicationHandler {
             } else {
                 throw new IllegalArgumentException("Invalid role: " + role);
             }
+
         } catch (IOException e) {
+            System.err.println("I/O error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Creates the Player instance for this process
+     */
+    private void setupPlayer() {
+        player = factory.createPlayer(role);
+    }
+
+    /**
+     * Initiator logic: connects to responder, sends 10 messages, and reads replies.
+     * Retries connection if responder is not ready.
+     */
+    private void runInitiator() {
+        int maxRetries = 8;
+        int attempt = 0;
+
+        while (attempt < maxRetries) {
+            try {
+                System.out.println("[Initiator] Connecting to responder at port " + otherPort
+                        + " (Attempt " + (attempt + 1) + "/" + maxRetries + ")...");
+                socket = new Socket("localhost", otherPort);
+                break;
+            } catch (IOException e) {
+                attempt++;
+                if (attempt >= maxRetries) {
+                    System.err.println("[Initiator] Could not connect after " + maxRetries + " attempts.");
+                    System.err.println("Please make sure the responder is running.");
+                    cleanup();
+                    return;
+                }
+                System.out.println("[Initiator] Responder not ready. Retrying in 2 second...");
+                try { Thread.sleep(2000); } catch (InterruptedException ex) { Thread.currentThread().interrupt(); return; }
+            }
+        }
+
+        System.out.println("[Initiator] Connected. Starting communication...");
+
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
+            this.writer = new PrintWriter(writer, true);
+            this.reader = reader;
+
+            for (int i = 1; i <= maxMessages; i++) {
+                String msg = "Message " + i;
+                writer.write(msg);
+                writer.newLine();
+                writer.flush();
+
+                String response = reader.readLine();
+                System.out.println("[Initiator] Received: " + response);
+
+                Thread.sleep(100);
+            }
+
+            System.out.println("[Initiator] Communication complete.");
+
+        } catch (IOException | InterruptedException e) {
             System.err.println("I/O error: " + e.getMessage());
             e.printStackTrace();
         } finally {
@@ -74,80 +136,50 @@ public class SeparateProcessCommunicationHandler {
     }
 
     /**
-     * Sets up the Player instance for this process.
-     */
-    private void setupPlayer() {
-        player = factory.createPlayer(role);
-    }
-
-    /**
-     * Initiator role:
-     * - Connects to responder
-     * - Sends maxMessages
-     * - Reads responses from responder
-     */
-    private void runInitiator() throws IOException {
-        System.out.println("[Initiator] Connecting to responder at port " + otherPort + "...");
-        socket = new Socket("localhost", otherPort);
-        out = new PrintWriter(socket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-        for (int i = 1; i <= maxMessages; i++) {
-            String message = "Message " + i;
-            player.sendMessage("responder", message);
-            out.println(message);
-
-            String response = in.readLine();
-            if (response != null) {
-                messagesReceived.incrementAndGet();
-                System.out.println("[Initiator] received: " + response);
-            }
-        }
-        System.out.println("[Initiator] Communication complete.");
-    }
-
-    /**
-     * Responder role:
-     * - Listens on myPort for incoming connections
-     * - Replies to each message with appended counter
+     * Responder logic: listens on myPort, receives messages, replies with incremented counter.
      */
     private void runResponder() throws IOException {
         System.out.println("[Responder] Waiting for initiator on port " + myPort + "...");
         serverSocket = new ServerSocket(myPort);
         socket = serverSocket.accept();
-        out = new PrintWriter(socket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        writer = new PrintWriter(socket.getOutputStream(), true);
 
         int replyCounter = 0;
         String received;
-        while ((received = in.readLine()) != null && messagesReceived.get() < maxMessages) {
-            System.out.println("[Responder] received: " + received);
+        while ((received = reader.readLine()) != null && messagesReceived.get() < maxMessages) {
+            System.out.println("[Responder] Received: " + received);
             replyCounter++;
             String reply = received + " [" + replyCounter + "]";
-            player.sendMessage("initiator", reply);
-            out.println(reply);
+            writer.println(reply);
             messagesReceived.incrementAndGet();
         }
 
         System.out.println("[Responder] Communication complete.");
+        cleanup();
     }
 
     /**
-     * Cleans up all resources including sockets, streams, and unregisters the player.
+     * Cleans up resources: sockets, streams, and unregisters the player.
      */
     private void cleanup() {
+        System.out.println("[" + role + "] Cleaning up resources...");
+
         try {
-            if (out != null) out.close();
-            if (in != null) in.close();
+            if (reader != null) reader.close();
+        } catch (IOException e) { System.err.println("Error closing reader: " + e.getMessage()); }
+
+        if (writer != null) writer.close();
+
+        try {
             if (socket != null && !socket.isClosed()) socket.close();
             if (serverSocket != null && !serverSocket.isClosed()) serverSocket.close();
-        } catch (IOException e) {
-            System.err.println("Error during socket cleanup: " + e.getMessage());
-        }
+        } catch (IOException e) { System.err.println("Error closing socket: " + e.getMessage()); }
 
-        if (player != null) {
-            player.shutdown();
-            player = null;
+        if (router != null && player != null) {
+            router.unregisterPlayer(player);
+            System.out.println("[" + role + "] has been unregistered from the router.");
         }
 
         System.out.println("SeparateProcessCommunicationHandler: cleanup completed.");

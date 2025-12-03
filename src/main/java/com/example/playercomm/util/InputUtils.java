@@ -3,60 +3,56 @@ package com.example.playercomm.util;
 import java.util.Scanner;
 
 /**
- * Utility class for reading validated inputs from the console.
- *
- * Responsibilities:
- * - Read integers within a specified range
- * - Read TCP ports (1024–65535)
- * - Read valid roles for the player
- *
- * Notes:
- * - reusable across multiple classes
+ * Utility class to handle input validation from the console.
  */
 public class InputUtils {
-    private static final int MIN_PORT = 1024;
-    private static final int MAX_PORT = 65535;
 
     /**
-     * Reads an integer from the user within the specified range.
+     * Reads an integer from the user between min and max (inclusive).
      */
     public static int readInt(Scanner scanner, String prompt, int min, int max) {
         int value;
         while (true) {
             System.out.print(prompt);
-            if (scanner.hasNextInt()) {
-                value = scanner.nextInt();
+            String line = scanner.nextLine();
+            try {
+                value = Integer.parseInt(line);
                 if (value >= min && value <= max) {
-                    break;
+                    return value;
                 }
-            } else {
-                scanner.next(); // discard invalid input
+                System.out.println("Please enter a number between " + min + " and " + max + ".");
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
             }
-            System.out.printf("Invalid input. Enter a number between %d and %d.%n", min, max);
         }
-        return value;
     }
 
     /**
-     * Reads a valid TCP port (1024–65535) from the user.
-     */
-    public static int readPort(Scanner scanner, String prompt) {
-        return readInt(scanner, prompt, MIN_PORT, MAX_PORT);
-    }
-
-    /**
-     * Reads a valid role ("initiator" or "responder") from the user.
+     * Reads the role from the user.
+     * Accepts 'i' or 'r' (case-insensitive) and converts to full role string.
+     *
+     * @param scanner Scanner for reading input
+     * @param prompt  Prompt to display
+     * @return "initiator" or "responder"
      */
     public static String readRole(Scanner scanner, String prompt) {
-        String role;
         while (true) {
-            System.out.print(prompt);
-            role = scanner.next().trim().toLowerCase();
-            if (role.equals("initiator") || role.equals("responder")) {
-                break;
+            System.out.print(prompt + " (i = initiator, r = responder): ");
+            String line = scanner.nextLine().trim().toLowerCase();
+            if ("i".equals(line)) {
+                return "initiator";
+            } else if ("r".equals(line)) {
+                return "responder";
+            } else {
+                System.out.println("Invalid input. Please enter 'i' for initiator or 'r' for responder.");
             }
-            System.out.println("Invalid role. Enter 'initiator' or 'responder'.");
         }
-        return role;
+    }
+
+    /**
+     * Reads a port number from the user.
+     */
+    public static int readPort(Scanner scanner, String prompt) {
+        return readInt(scanner, prompt + " (1024-65535): ", 1024, 65535);
     }
 }

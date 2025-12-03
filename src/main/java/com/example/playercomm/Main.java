@@ -91,10 +91,14 @@ public class Main {
     private static void runSeparateProcessMode(Scanner scanner) {
         System.out.println("[Mode] Separate-process mode selected.");
 
-        String role = InputUtils.readRole(scanner, "Enter role (initiator/responder): ");
+        String role = InputUtils.readRole(scanner, "Enter role");
+
+        System.out.println("Please select ports in the range 1024 - 65535.");
         int myPort = InputUtils.readPort(scanner, "Enter your port: ");
         int otherPort = InputUtils.readPort(scanner, "Enter other player's port: ");
-        int maxMessages = InputUtils.readInt(scanner, "Enter number of messages to exchange: ", MIN_MESSAGES, MAX_MESSAGES);
+
+        // Number of messages is fixed as per requirement
+        int maxMessages = 10;
 
         SeparateProcessCommunicationHandler handler =
                 (SeparateProcessCommunicationHandler) CommunicationHandlerFactory.createHandler(
