@@ -1,5 +1,6 @@
 package com.example.playercomm;
 
+import com.example.playercomm.core.factory.CommunicationHandlerFactory;
 import com.example.playercomm.handler.SameProcessCommunicationHandler;
 import com.example.playercomm.handler.SeparateProcessCommunicationHandler;
 import com.example.playercomm.util.InputUtils;
@@ -14,11 +15,11 @@ import java.util.Scanner;
  *      1. Same-process mode (both players in same JVM)
  *      2. Separate-process mode (players in different JVMs)
  * - Validates all user inputs (role, ports, message count)
- * - Initializes the appropriate communication handler
+ * - Uses CommunicationHandlerFactory to create the appropriate handler
  * - Starts the communication flow
  *
  * Notes:
- * - Designed for extensibility and minimal changes for future modes
+ * - Factory pattern is used to handle handler object creation
  */
 public class Main {
 
@@ -46,19 +47,27 @@ public class Main {
 
     /**
      * Handles same-process mode.
-     * Initializes SameProcessCommunicationHandler and starts communication.
+     * Responsibilities:
+     * - Uses factory to create SameProcessCommunicationHandler
+     * - Sets up players in the handler
+     * - Starts the communication flow
      */
     private static void runSameProcessMode() {
         System.out.println("[Mode] Same-process mode selected.");
 
-        SameProcessCommunicationHandler handler = new SameProcessCommunicationHandler();
+        SameProcessCommunicationHandler handler =
+                (SameProcessCommunicationHandler) CommunicationHandlerFactory.createHandler("same", null, 0, 0, 0);
+
         handler.setupPlayers("Initiator", "Responder");
         handler.startCommunication();
     }
 
     /**
      * Handles separate-process mode.
-     * Prompts the user for role, ports, and message count, then starts the socket-based handler.
+     * Responsibilities:
+     * - Reads role, ports, and max messages from user
+     * - Uses factory to create SeparateProcessCommunicationHandler
+     * - Starts the communication flow
      *
      * @param scanner Scanner object for reading console input
      */
@@ -66,14 +75,13 @@ public class Main {
         System.out.println("[Mode] Separate-process mode selected.");
 
         String role = InputUtils.readRole(scanner, "Enter role (initiator/responder): ");
-
         int myPort = InputUtils.readPort(scanner, "Enter your port: ");
         int otherPort = InputUtils.readPort(scanner, "Enter other player's port: ");
-
         int maxMessages = InputUtils.readInt(scanner, "Enter number of messages to exchange: ", MIN_MESSAGES, MAX_MESSAGES);
 
         SeparateProcessCommunicationHandler handler =
-                new SeparateProcessCommunicationHandler(role, myPort, otherPort, maxMessages);
+                (SeparateProcessCommunicationHandler) CommunicationHandlerFactory.createHandler(
+                        "separate", role, myPort, otherPort, maxMessages);
 
         handler.startCommunication();
     }

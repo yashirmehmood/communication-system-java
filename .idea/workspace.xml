@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="restructuring of core package">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SeparateProcessCommunicationHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/util/InputUtils.java" afterDir="false" />
+    <list default="true" id="d0a804a9-6a80-43c5-b1f0-75537e9f2fa5" name="Changes" comment="Code Refactoring: made the separate handler classes for two different modes">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/core/factory/CommunicationHandlerFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/PlayerCommunicationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/playercomm/handler/SameProcessCommunicationHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +122,14 @@
       <option name="project" value="LOCAL" />
       <updated>1764783433167</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Code Refactoring: made the separate handler classes for two different modes">
+      <created>1764787239955</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1764787239955</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -148,6 +153,7 @@
     <MESSAGE value="Created Message class for future enhancement" />
     <MESSAGE value="Adjusted the code for message class" />
     <MESSAGE value="restructuring of core package" />
-    <option name="LAST_COMMIT_MESSAGE" value="restructuring of core package" />
+    <MESSAGE value="Code Refactoring: made the separate handler classes for two different modes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Code Refactoring: made the separate handler classes for two different modes" />
   </component>
 </project>
