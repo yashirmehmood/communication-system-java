@@ -14,19 +14,15 @@ import java.util.Scanner;
  * - Provides user-friendly mode selection:
  *      1. Same-process mode (both players in same JVM)
  *      2. Separate-process mode (players in different JVMs)
- * - For same-process mode, allows user to choose automatic or manual messaging
- * - Validates all user inputs (role, ports, message count)
- * - Uses CommunicationHandlerFactory to create the appropriate handler
+ * - Uses CommunicationHandlerFactory to create appropriate handler instances
+ * - Supports automatic or manual message sending
  * - Starts the communication flow
  *
  * Notes:
- * - Factory pattern is used to handle handler object creation
- * - Fully interactive for manual messaging or automated for testing
+ * - Scanner is passed to handlers to centralize user input
+ * - Designed to be easily extensible for future modes or features
  */
 public class Main {
-
-    private static final int MIN_MESSAGES = 1;
-    private static final int MAX_MESSAGES = 1000;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -51,58 +47,43 @@ public class Main {
      * Handles same-process mode.
      * Responsibilities:
      * - Uses factory to create SameProcessCommunicationHandler
-     * - Sets up players in the handler
-     * - Prompts user to select automatic or manual messaging mode
-     * - Starts the communication flow
+     * - Sets up players
+     * - Starts communication (automatic or manual)
      *
-     * @param scanner Scanner for reading user input
+     * @param scanner Scanner instance for user input
      */
     private static void runSameProcessMode(Scanner scanner) {
         System.out.println("[Mode] Same-process mode selected.");
 
-        // Ask user for messaging mode: automatic vs manual
-        System.out.println("Select messaging mode:");
-        System.out.println("1. Automatic messages (10 messages sent automatically)");
-        System.out.println("2. Manual messages (type each message)");
-
-        int messageMode = InputUtils.readInt(scanner, "Enter choice (1 or 2): ", 1, 2);
-        boolean automaticMode = messageMode == 1;
-
-        // Create handler using factory
         SameProcessCommunicationHandler handler =
                 (SameProcessCommunicationHandler) CommunicationHandlerFactory.createHandler(
-                        "same", null, 0, 0, 0, automaticMode);
+                        "same", scanner, null, 0, 0, 0
+                );
 
         handler.setupPlayers("Initiator", "Responder");
-
-        // Start communication based on user's choice
-        handler.startCommunication(automaticMode);
+        handler.startCommunication();
     }
 
     /**
      * Handles separate-process mode.
      * Responsibilities:
-     * - Reads role, ports, and max messages from user
-     * - Uses factory to create SeparateProcessCommunicationHandler
-     * - Starts the communication flow
+     * - Reads role, ports from user
+     * - Creates SeparateProcessCommunicationHandler using factory
+     * - Starts communication (automatic or manual)
      *
-     * @param scanner Scanner object for reading console input
+     * @param scanner Scanner instance for user input
      */
     private static void runSeparateProcessMode(Scanner scanner) {
         System.out.println("[Mode] Separate-process mode selected.");
 
-        String role = InputUtils.readRole(scanner, "Enter role");
-
-        System.out.println("Please select ports in the range 1024 - 65535.");
-        int myPort = InputUtils.readPort(scanner, "Enter your port: ");
-        int otherPort = InputUtils.readPort(scanner, "Enter other player's port: ");
-
-        // Number of messages is fixed as per requirement
-        int maxMessages = 10;
+        String role = InputUtils.readRoleShort(scanner, "Enter role (i = initiator, r = responder): ");
+        int myPort = InputUtils.readPort(scanner, "Enter your port (1024-65535): ");
+        int otherPort = InputUtils.readPort(scanner, "Enter other player's port (1024-65535): ");
 
         SeparateProcessCommunicationHandler handler =
                 (SeparateProcessCommunicationHandler) CommunicationHandlerFactory.createHandler(
-                        "separate", role, myPort, otherPort, maxMessages);
+                        "separate", scanner, role, myPort, otherPort, 10
+                );
 
         handler.startCommunication();
     }

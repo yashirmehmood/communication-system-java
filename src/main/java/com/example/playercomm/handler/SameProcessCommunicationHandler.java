@@ -13,18 +13,18 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * Responsibilities:
  * - Creates players using PlayerFactory
- * - Sets up message sending and receiving
- * - Implements automatic and manual messaging modes
- * - Stops communication after initiator sends and receives maxMessages
- * - Performs cleanup by unregistering players and freeing resources
+ * - Supports automatic or manual message sending
+ * - Implements stop condition: initiator sends 10 messages and stops after 10 replies
  *
  * Notes:
  * - Both players run in the same process
+ * - Scanner is used for manual message input
  */
 public class SameProcessCommunicationHandler {
 
-    private final PlayerMessageRouter router;
+    private final PlayerMessageRouter broker;
     private final PlayerFactory factory;
+    private final Scanner scanner;
 
     private Player initiator;
     private Player responder;
@@ -32,25 +32,21 @@ public class SameProcessCommunicationHandler {
     private final AtomicInteger initiatorReceivedCount = new AtomicInteger(0);
     private final int maxMessages = 10;
 
-    public SameProcessCommunicationHandler() {
-        this.router = new PlayerMessageRouter();
-        this.factory = new PlayerFactory(router);
+    private boolean manualMode = false;
+
+    public SameProcessCommunicationHandler(Scanner scanner) {
+        this.broker = new PlayerMessageRouter();
+        this.factory = new PlayerFactory(broker);
+        this.scanner = scanner;
     }
 
-    /**
-     * Creates and registers the initiator and responder players.
-     *
-     * @param initiatorName Name of the initiating player
-     * @param responderName Name of the responding player
-     */
     public void setupPlayers(String initiatorName, String responderName) {
-
-        // Basic registration (factory + router)
+        // Create and register players
         initiator = factory.createPlayer(initiatorName);
         responder = factory.createPlayer(responderName);
 
-        // Responder automatically replies with incremented counter
-        responder = new Player(responderName, router) {
+        // Wrap responder to automatically reply with counter
+        responder = new Player(responderName, broker) {
             private int replyCounter = 0;
 
             @Override
@@ -62,8 +58,8 @@ public class SameProcessCommunicationHandler {
             }
         };
 
-        // Initiator tracks received messages and stops at maxMessages
-        initiator = new Player(initiatorName, router) {
+        // Wrap initiator to track received messages
+        initiator = new Player(initiatorName, broker) {
             @Override
             public void receiveMessage(Message message) {
                 super.receiveMessage(message);
@@ -74,75 +70,30 @@ public class SameProcessCommunicationHandler {
             }
         };
 
-        router.registerPlayer(initiator);
-        router.registerPlayer(responder);
+        broker.registerPlayer(initiator);
+        broker.registerPlayer(responder);
+
+        // Ask user if manual or automatic mode
+        manualMode = com.example.playercomm.util.InputUtils.readYesNo(scanner,
+                "Do you want to send messages manually?");
     }
 
-    /**
-     * Starts the messaging process in either automatic or manual mode.
-     *
-     * @param automaticMode true for automatic messages, false for manual input
-     */
-    public void startCommunication(boolean automaticMode) {
-        try {
-            if (automaticMode) {
-                sendAutomaticMessages();
-            } else {
-                sendManualMessages();
-            }
-        } finally {
-            cleanup(); // Ensure cleanup always happens
-        }
-    }
-
-    /**
-     * Sends maxMessages automatically from initiator to responder.
-     */
-    private void sendAutomaticMessages() {
+    public void startCommunication() {
         try {
             for (int i = 1; i <= maxMessages; i++) {
-                String msg = "Message " + i;
+                String msg;
+                if (manualMode) {
+                    System.out.print("Enter message " + i + ": ");
+                    msg = scanner.nextLine();
+                } else {
+                    msg = "Message " + i;
+                    Thread.sleep(100); // small delay for readability
+                }
                 initiator.sendMessage(responder.getName(), msg);
-                Thread.sleep(100);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.err.println("Automatic messaging interrupted: " + e.getMessage());
+            System.err.println("Communication interrupted: " + e.getMessage());
         }
-    }
-
-    /**
-     * Reads messages from the user and sends them from initiator to responder.
-     */
-    private void sendManualMessages() {
-        Scanner scanner = new Scanner(System.in);
-        int counter = 1;
-
-        while (initiatorReceivedCount.get() < maxMessages) {
-            System.out.print("Enter message #" + counter + ": ");
-            String msg = scanner.nextLine();
-            if (msg == null || msg.isEmpty()) {
-                System.out.println("Message cannot be empty. Try again.");
-                continue;
-            }
-            initiator.sendMessage(responder.getName(), msg);
-            counter++;
-        }
-    }
-
-    /**
-     * Performs cleanup by unregistering players from the router
-     * and clearing local references to help garbage collection.
-     */
-    private void cleanup() {
-        if (initiator != null) {
-            initiator.shutdown(); // unregister from router
-            initiator = null;
-        }
-        if (responder != null) {
-            responder.shutdown(); // unregister from router
-            responder = null;
-        }
-        System.out.println("SameProcessCommunicationHandler: cleanup completed.");
     }
 }
