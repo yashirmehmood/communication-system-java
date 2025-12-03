@@ -1,5 +1,6 @@
 package com.example.playercomm.core.factory;
 
+import com.example.playercomm.handler.base.AbstractCommunicationHandler;
 import com.example.playercomm.handler.SameProcessCommunicationHandler;
 import com.example.playercomm.handler.SeparateProcessCommunicationHandler;
 
@@ -26,8 +27,8 @@ public class CommunicationHandlerFactory {
      * @param maxMessages Max messages - only used for separate mode
      * @return Communication handler instance
      */
-    public static Object createHandler(String mode, Scanner scanner,
-                                       String role, int myPort, int otherPort, int maxMessages) {
+    public static AbstractCommunicationHandler createHandler(String mode, Scanner scanner,
+                                                             String role, int myPort, int otherPort, int maxMessages) {
         return switch (mode.toLowerCase()) {
             case "same" -> new SameProcessCommunicationHandler(scanner);
             case "separate" -> new SeparateProcessCommunicationHandler(scanner, role, myPort, otherPort, maxMessages);

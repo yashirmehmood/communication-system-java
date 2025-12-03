@@ -2,10 +2,12 @@ package com.example.playercomm.handler;
 
 import com.example.playercomm.core.Player;
 import com.example.playercomm.core.factory.PlayerFactory;
+import com.example.playercomm.handler.base.AbstractCommunicationHandler;
 import com.example.playercomm.model.Message;
 import com.example.playercomm.transport.PlayerMessageRouter;
 import com.example.playercomm.util.InputUtils;
 
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -13,36 +15,40 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Handles communication between two Player instances running in the same JVM process.
  *
  * Responsibilities:
- * - Creates players using PlayerFactory
- * - Allows initiator to send messages automatically or manually
- * - Implements stop condition: initiator sends and receives 10 messages
+ * - Creates and registers initiator and responder players using PlayerFactory
+ * - Manages message exchange between the two players
+ * - Supports both automatic and manual message sending modes for the initiator
+ * - Implements stop condition: terminates after initiator has sent and received the defined number of messages
+ * - Provides thread-safe counters for received messages
  */
-public class SameProcessCommunicationHandler {
+public class SameProcessCommunicationHandler extends AbstractCommunicationHandler {
 
     private final PlayerMessageRouter broker;
     private final PlayerFactory factory;
-    private final Scanner scanner;
 
     private Player initiator;
     private Player responder;
 
     private final AtomicInteger initiatorReceivedCount = new AtomicInteger(0);
-    private final int maxMessages = 10;
 
+    /**
+     * Constructs the SameProcessCommunicationHandler with a scanner and default max messages.
+     *
+     * @param scanner Scanner instance for reading user input
+     */
     public SameProcessCommunicationHandler(Scanner scanner) {
-        this.scanner = scanner;
+        super(scanner, 10); // maxMessages = 10
         this.broker = new PlayerMessageRouter();
         this.factory = new PlayerFactory(broker);
     }
 
     /**
-     * Creates and registers the initiator and responder players.
+     * Sets up the initiator and responder players and registers them with the message broker.
      *
      * @param initiatorName Name of the initiating player
      * @param responderName Name of the responding player
      */
     public void setupPlayers(String initiatorName, String responderName) {
-
         responder = new Player(responderName, broker) {
             private int replyCounter = 0;
 
@@ -71,29 +77,39 @@ public class SameProcessCommunicationHandler {
     }
 
     /**
-     * Starts the messaging process where the initiator sends messages to the responder.
-     * User can choose automatic or manual message sending.
+     * Starts the communication flow between initiator and responder.
+     * Delegates the sending mode (automatic or manual) to the common method defined in the abstract base.
      */
     public void startCommunication() {
-        boolean automatic = InputUtils.readYesNo(scanner, "Do you want to send messages automatically?");
         try {
-            if (automatic) {
-                for (int i = 1; i <= maxMessages; i++) {
-                    String msg = "Message " + i;
-                    initiator.sendMessage(responder.getName(), msg);
-                    Thread.sleep(100);
-                }
-            } else {
-                int sent = 0;
-                while (sent < maxMessages) {
-                    String msg = InputUtils.readLine(scanner, "Enter message " + (sent + 1) + ": ");
-                    initiator.sendMessage(responder.getName(), msg);
-                    sent++;
-                }
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("Communication interrupted: " + e.getMessage());
+            sendMessagesWithUserChoice();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Sends messages automatically from the initiator to the responder.
+     * Messages are generated sequentially and a small delay is added for readability.
+     */
+    @Override
+    protected void sendMessagesAutomatically() {
+        for (int i = 1; i <= maxMessages; i++) {
+            String msg = "Message " + i;
+            initiator.sendMessage(responder.getName(), msg);
+            try { Thread.sleep(100); } catch (InterruptedException ignored) {}
+        }
+    }
+
+    /**
+     * Sends messages manually, prompting the user to enter each message.
+     * This method is used when the user selects manual mode.
+     */
+    @Override
+    protected void sendMessagesManually() {
+        for (int i = 1; i <= maxMessages; i++) {
+            String msg = InputUtils.readLine(scanner, "Enter message " + i + ": ");
+            initiator.sendMessage(responder.getName(), msg);
         }
     }
 }
